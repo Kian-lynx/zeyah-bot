@@ -174,8 +174,14 @@ export namespace ZeyahAdapter {
       const resolvers = Promise.withResolvers<NoPromiseZeyahDispatched>();
       this.promiseInternal = resolvers.promise;
       this.resolveInternal = (val) => {
-        this.then = null;
-        resolvers.resolve(val);
+        resolvers.resolve(
+          new Proxy(val, {
+            get(target, prop, re) {
+              if (prop === "then") return null;
+              return Reflect.get(target, prop, re);
+            },
+          }),
+        );
       };
       this.rejectInternal = (err) => {
         resolvers.reject(err);

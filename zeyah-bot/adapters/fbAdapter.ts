@@ -158,12 +158,19 @@ export class Ws3FBAdapter extends ZeyahAdapter {
         if (validForm.attachment.length === 0) {
           delete validForm.attachment;
         }
-        const res = this.internalAPI.sendMessageMqtt(
+        dispatched.then((a) => {
+          console.log({
+            mid: dispatched.messageID,
+            tid: dispatched.threadID,
+          });
+        });
+        this.internalAPI.sendMessageMqtt(
           validForm,
           form.thread,
           form.replyTo,
           (err, info) => {
             console.log("dispfb");
+            console.log({ info });
             if (err) {
               return dispatched.__resolveResponse(null, err);
             }
