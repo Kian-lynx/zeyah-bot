@@ -7,7 +7,7 @@ import yts from "yt-search";
 export const YTH = module.register({
   emoji: "🎧",
   name: "music",
-  version: "1.0.2",
+  version: "1.0.3",
   author: ["@lianecagara", "@Jonell-Magallanes"],
   pluginNames: [],
   description: "Play and Download Youtube Music",
@@ -72,7 +72,11 @@ export const YTH = module.register({
 
       if (message === "dl" || message === "download") {
         const downloadMessage = await zeyahIO.reply(
-          <>body:📥 Download URL:\n${download}</>,
+          <>
+            <Bold>📥 Download URL:</Bold>
+            <br />
+            {download}
+          </>,
         );
 
         setTimeout(async () => {
