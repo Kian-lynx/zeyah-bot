@@ -705,51 +705,51 @@ export const Divider: Zeyah.FC<
  * *(Jsdoc fully written by jules with help of lianecagara)*
  */
 export const KakkoQuote: Zeyah.FC<PropsWithInfo> = ({ getChildrenString }) => {
-  return <>『 {getChildrenString} 』</>;
+  return <>『 {getChildrenString()} 』</>;
 };
 
 export const CornerQuote: Zeyah.FC<PropsWithInfo> = ({ getChildrenString }) => {
-  return <>「 {getChildrenString} 」</>;
+  return <>「 {getChildrenString()} 」</>;
 };
 
 export const FancyBracketQuote: Zeyah.FC<PropsWithInfo> = ({
   getChildrenString,
 }) => {
-  return <>【 {getChildrenString} 】</>;
+  return <>【 {getChildrenString()} 】</>;
 };
 
 export const GuillemetsQuote: Zeyah.FC<PropsWithInfo> = ({
   getChildrenString,
 }) => {
-  return <>« {getChildrenString} »</>;
+  return <>« {getChildrenString()} »</>;
 };
 
 export const DoubleAngleQuote: Zeyah.FC<PropsWithInfo> = ({
   getChildrenString,
 }) => {
-  return <>《 {getChildrenString} 》</>;
+  return <>《 {getChildrenString()} 》</>;
 };
 
 export const WhiteCornerQuote: Zeyah.FC<PropsWithInfo> = ({
   getChildrenString,
 }) => {
-  return <>「 {getChildrenString} 」</>;
+  return <>「 {getChildrenString()} 」</>;
 };
 
 export const SmallQuote: Zeyah.FC<PropsWithInfo> = ({ getChildrenString }) => {
-  return <>‹ {getChildrenString} ›</>;
+  return <>‹ {getChildrenString()} ›</>;
 };
 
 export const HeavyBracketQuote: Zeyah.FC<PropsWithInfo> = ({
   getChildrenString,
 }) => {
-  return <>【 {getChildrenString} 】</>;
+  return <>【 {getChildrenString()} 】</>;
 };
 
 export const ParenthesisQuote: Zeyah.FC<PropsWithInfo> = ({
   getChildrenString,
 }) => {
-  return <>( {getChildrenString} )</>;
+  return <>( {getChildrenString()} )</>;
 };
 
 export const LeftKakko: Zeyah.FC<PropsWithInfo> = () => <>「</>;
