@@ -9,7 +9,7 @@ export const Eval = module.register({
   emoji: "🤣",
   name: "eval",
   role: 2,
-  version: "1.0.0",
+  version: "1.0.1",
   author: ["@lianecagara"],
   pluginNames: [],
   description: "Evaluate a Typescript Code.",
@@ -23,13 +23,17 @@ export const Eval = module.register({
       );
     }
     try {
-      await evalTsx(code, {
-        ...ctx,
-        inspect,
-        Registry,
-        utils,
-        Comps,
-      });
+      await evalTsx(
+        code,
+        {
+          ...ctx,
+          inspect,
+          Registry,
+          utils,
+          Comps,
+        },
+        true,
+      );
     } catch (error) {
       zeyahIO.error(error);
     }

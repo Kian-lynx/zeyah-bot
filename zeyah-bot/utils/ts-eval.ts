@@ -32,7 +32,11 @@ export function createEvalTsx(tsconfigPath: string) {
     path.dirname(tsconfigPath),
   );
 
-  return (code: string, moreContext: Record<string, any> = {}) => {
+  return (
+    code: string,
+    moreContext: Record<string, any> = {},
+    checked = false,
+  ) => {
     const context = {
       ...moreContext,
 
