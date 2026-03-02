@@ -159,31 +159,55 @@ export class Ws3FBAdapter extends ZeyahAdapter {
           delete validForm.attachment;
         }
         dispatched.then((a) => {
+          return;
           console.log({
             mid: dispatched.messageID,
             tid: dispatched.threadID,
           });
         });
-        this.internalAPI.sendMessageMqtt(
-          validForm,
-          form.thread,
-          form.replyTo,
-          (err, info) => {
-            console.log("dispfb");
-            console.log({ info });
-            if (err) {
+        if (1) {
+          const res = this.internalAPI.sendMessage(
+            validForm,
+            form.thread,
+            form.replyTo,
+            false,
+          ) as Promise<any>;
+          res
+            .then((info) => {
+              return dispatched.__resolveResponse(
+                {
+                  messageID: info.messageID,
+                  threadID: info.threadID,
+                  timestamp: new Date(info.timestamp ?? Date.now()).getTime(),
+                },
+                null,
+              );
+            })
+            .catch((err) => {
               return dispatched.__resolveResponse(null, err);
-            }
-            return dispatched.__resolveResponse(
-              {
-                messageID: info.messageID,
-                threadID: info.threadID,
-                timestamp: new Date(info.timestamp ?? Date.now()).getTime(),
-              },
-              null,
-            );
-          },
-        );
+            });
+        } else if (0) {
+          this.internalAPI.sendMessageMqtt(
+            validForm,
+            form.thread,
+            form.replyTo,
+            (err, info) => {
+              console.log("dispfb");
+              console.log({ info });
+              if (err) {
+                return dispatched.__resolveResponse(null, err);
+              }
+              return dispatched.__resolveResponse(
+                {
+                  messageID: info.messageID,
+                  threadID: info.threadID,
+                  timestamp: new Date(info.timestamp ?? Date.now()).getTime(),
+                },
+                null,
+              );
+            },
+          );
+        }
       });
       return dispatched;
     } catch (error) {
