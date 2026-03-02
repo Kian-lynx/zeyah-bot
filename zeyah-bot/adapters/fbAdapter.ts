@@ -24,6 +24,7 @@ import {
   ZeyahMessageEvent,
   ZeyahMessageOrReply,
 } from "@zeyah-bot/types";
+import { isEqual } from "@zeyah-bot/utils";
 import { ReadStream } from "node:fs";
 import {
   API,
@@ -42,9 +43,6 @@ export class Ws3FBAdapter extends ZeyahAdapter {
     this.internalAPI = api;
 
     this.repliesMap = new Map<string, Ws3FBDispatched>();
-    this.on("event", (e) => {
-      this.handleReplies(e);
-    });
   }
 
   handleReplies(e: ZeyahInferredEvent) {
@@ -80,12 +78,16 @@ export class Ws3FBAdapter extends ZeyahAdapter {
     //     Object.entries(this.internalAPI).map(([k, v]) => [k, String(v)]),
     //   ),
     // );
-    (this.internalAPI.listenMqtt as API["listen"])((err, event) => {
+    this.on("event", (e) => {
+      this.handleReplies(e);
+    });
+    (this.internalAPI.listenMqtt as API["listen"])((err, event_) => {
       if (err) {
         console.error(err);
         return;
       }
-      if (event.type === "message") {
+      if (isEqual(event_.type, "message", "message_reply" as "message")) {
+        const event = event_ as Extract<ListenEvent, { type: "message" }>;
         this.triggerEvent({
           body: event.body,
           mentions: Object.fromEntries(Object.entries(event.mentions)),
@@ -106,6 +108,11 @@ export class Ws3FBAdapter extends ZeyahAdapter {
           type: event.messageReply ? "message_reply" : "message",
           extras: new Map(),
         } satisfies ZeyahMessageOrReply);
+      } else {
+        this.triggerEvent({
+          ...event_,
+          extras: new Map(),
+        } as any);
       }
     });
   }
