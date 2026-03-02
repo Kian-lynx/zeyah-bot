@@ -91,9 +91,7 @@ export abstract class ZeyahAdapter extends Emitter<ZeyahAdapter.AdapterEventMap>
     this.emit("event", event, err);
   }
 
-  abstract onResolveUsername(
-    identifier: string,
-  ): Promise<string>;
+  abstract onResolveUsername(identifier: string): Promise<string>;
 }
 
 export namespace ZeyahAdapter {
@@ -131,7 +129,7 @@ export namespace ZeyahAdapter {
     extends Emitter<DispatchedEventMap>
     implements PromiseLike<NoPromiseZeyahDispatched>
   {
-    protected promiseInternal: Promise<ZeyahDispatched>;
+    protected promiseInternal: Promise<NoPromiseZeyahDispatched>;
 
     error: null | any;
 
@@ -173,14 +171,15 @@ export namespace ZeyahAdapter {
     constructor(adapter: ZeyahAdapter) {
       super();
       this.adapter = adapter;
-      const self = this;
-      this.promiseInternal = new Promise<ZeyahDispatched>((resolve, reject) => {
-        self.resolveInternal = (val) => {
-          self.then = null;
-          resolve(val);
-        };
-        self.rejectInternal = reject;
-      });
+      const resolvers = Promise.withResolvers<NoPromiseZeyahDispatched>();
+      this.promiseInternal = resolvers.promise;
+      this.resolveInternal = (val) => {
+        this.then = null;
+        resolvers.resolve(val);
+      };
+      this.rejectInternal = (err) => {
+        resolvers.reject(err);
+      };
       this.#ready = false;
       this.error = null;
     }

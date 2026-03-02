@@ -75,6 +75,11 @@ export class Ws3FBAdapter extends ZeyahAdapter {
   }
 
   onStartListen(): void {
+    // console.log(
+    //   Object.fromEntries(
+    //     Object.entries(this.internalAPI).map(([k, v]) => [k, String(v)]),
+    //   ),
+    // );
     (this.internalAPI.listenMqtt as API["listen"])((err, event) => {
       if (err) {
         console.error(err);
@@ -153,15 +158,15 @@ export class Ws3FBAdapter extends ZeyahAdapter {
         if (validForm.attachment.length === 0) {
           delete validForm.attachment;
         }
-        const res = (this.internalAPI.sendMessage as API["sendMessageMqtt"])(
+        const res = this.internalAPI.sendMessageMqtt(
           validForm,
           form.thread,
           form.replyTo,
-          true as any,
-        ) as unknown as Promise<Message>;
-        res.then(
-          (info) => {
+          (err, info) => {
             console.log("dispfb");
+            if (err) {
+              return dispatched.__resolveResponse(null, err);
+            }
             return dispatched.__resolveResponse(
               {
                 messageID: info.messageID,
@@ -170,10 +175,6 @@ export class Ws3FBAdapter extends ZeyahAdapter {
               },
               null,
             );
-          },
-          (e) => {
-            console.log("dispfberr");
-            return dispatched.__resolveResponse(null, e);
           },
         );
       });
