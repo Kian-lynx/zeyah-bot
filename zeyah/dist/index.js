@@ -60,7 +60,7 @@ var UniFont = ({
 };
 var Code = ({ childrenString }) => {
   return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(Platform, { type: "facebook", children: applyFonts(childrenString, "widespace") }),
+    /* @__PURE__ */ jsx(Platform, { type: "facebook", children: applyFonts(childrenString, "typewriter") }),
     /* @__PURE__ */ jsx(Platform, { type: "discord", children: `\`${escapeDiscordMarkdown(childrenString)}\`` })
   ] });
 };
@@ -74,7 +74,7 @@ var CodeBlock = ({
       "Language: ",
       lang,
       /* @__PURE__ */ jsx(Break, {}),
-      applyFonts(childrenString, "widespace")
+      applyFonts(childrenString, "typewriter")
     ] }),
     /* @__PURE__ */ jsx(Platform, { type: "discord", children: `\`\`\`${lang}
 ${escapeDiscordMarkdown(childrenString)}
@@ -422,10 +422,10 @@ ZeyahFragment.displayName = "Fragment";
 var Platform = ({
   type,
   platform,
-  childrenString
+  getChildrenString
 }) => {
   if (type !== platform) return "";
-  return childrenString;
+  return getChildrenString();
 };
 Platform.displayName = "Platform";
 function ensureArrayChildren2(children) {
