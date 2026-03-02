@@ -46,8 +46,9 @@ export class Ws3FBAdapter extends ZeyahAdapter {
   }
 
   handleReplies(e: ZeyahInferredEvent) {
+    // console.log(e);
     if (e.type === "message_reply") {
-      const dispatched = this.repliesMap.get(e.messageID);
+      const dispatched = this.repliesMap.get(e.messageReply.messageID);
       if (dispatched) {
         dispatched.emit("reply", new ZeyahIO(e, this), e);
       }
